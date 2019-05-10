@@ -29,7 +29,7 @@ describe(lab_data)
 ```
 ### Data dictionary
 1. `OH_TNO` 
-2. `OH_TRX_DT`
+2. `OH_TRX_DT` -- ** Need to check the format of the test dates**
 3. `SIH ID` -- SI Health ID
 4. `AGE`
 5. `OH_BOD` -- date of birth in -YYYY-MM-DD 
@@ -45,5 +45,21 @@ describe(lab_data)
 ## Convert long to wide
 ```{r group}
 library(dplyr)
-lab_data$visit_id <- lab_data %>% group_indices(paste("SIH ID","TI_NAME",sep = "-"))
+#lab_data$`SIH ID` <- factor(lab_data$`SIH ID`)
+## not working
+## lab_data$visit_id <- lab_data %>% group_indices(paste("SIH ID","TI_NAME","OH_TRX_DT",sep = "-"))
+
+# - sort by test date
+# create group id by SIH_ID & Test-ID
+lab_data$visit_id <- paste(lab_data$`SIH ID`,lab_data$"TI_NAME",sep="|")
+library(data.table)
+DT <- data.table(lab_data)
+DT[, visit_id2 := seq_len(.N), by=visit_id]
+View(DT[c(152,173),])
+## Trim data for transformation
+lab_data_long <- DT[,c("SIH ID","visit_id2","TI_NAME","OD_TR_VAL")]
+
+library(tidyr)
+# https://uc-r.github.io/tidyr
+lab_data.wide <- lab_data_long %>% spread(TI_NAME,OD_TR_VAL,fill =NA, convert = FALSE)
 ```
