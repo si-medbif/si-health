@@ -17,7 +17,7 @@ output: html_notebook
 library(readxl)
 lab_data <- read_excel("../data/2019_ITSIH_9.xlsx", 
    col_types = c("text", "text", "text", 
-       "numeric", "date", "numeric", "numeric", 
+       "numeric", "date", "numeric", "text", 
        "text", "text", "text"))
 ```
 
@@ -37,11 +37,13 @@ describe(lab_data)
 7. `OH_CLINIC_CODE` -- for the clinic requesting the tests
 8. `OD_TESTCODE` -- Test ID
 9. `TI_NAME` -- Test ID Name 
-10. `OD_TR_VAL` -- value of the tests? 
+10. `OD_TR_VAL` -- value of the tests? - `OD_TR_VAL` contain lots of "!" exclamation mark --> What does it mean? 
+
+**Check** 
+- `OD_TR_VAL` contain lots of "!" exclamation mark --> What does it mean? 
 
 ## Convert long to wide
 ```{r group}
 library(dplyr)
-lab_data %>% group_indices()
-
+lab_data$visit_id <- lab_data %>% group_indices(paste("SIH ID","TI_NAME",sep = "-"))
 ```
