@@ -1,0 +1,28 @@
+---
+title: "Transforming Lab Data from SI-IT"
+output: html_notebook
+---
+
+## Analysis Plan
+
+- Import lab data
+- Check available information
+- Convert long format to wide format
+  - change the date to visit number
+  - only select {HBA1C, microalbumin, ...} labs results from specific clinic
+
+## Import Data
+- The data is stored in `./data` directory (not part of github)
+```{r import_data}
+library(readxl)
+lab_data <- read_excel("../data/2019_ITSIH_9.xlsx", 
+   col_types = c("text", "text", "text", 
+       "numeric", "date", "numeric", "numeric", 
+       "text", "text", "text"))
+```
+
+```{r general description of the data}
+library(Hmisc)
+describe(lab_data)
+```
+
