@@ -21,8 +21,27 @@ lab_data <- read_excel("../data/2019_ITSIH_9.xlsx",
        "text", "text", "text"))
 ```
 
+##Check available data
+
 ```{r general description of the data}
 library(Hmisc)
 describe(lab_data)
 ```
+### Data dictionary
+1. `OH_TNO` 
+2. `OH_TRX_DT`
+3. `SIH ID` -- SI Health ID
+4. `AGE`
+5. `OH_BOD` -- date of birth in -YYYY-MM-DD 
+6. `OH_SEX` -- **not sure 1/2 coding for which sex** 
+7. `OH_CLINIC_CODE` -- for the clinic requesting the tests
+8. `OD_TESTCODE` -- Test ID
+9. `TI_NAME` -- Test ID Name 
+10. `OD_TR_VAL` -- value of the tests? 
 
+## Convert long to wide
+```{r group}
+library(dplyr)
+lab_data %>% group_indices()
+
+```
