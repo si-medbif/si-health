@@ -6,17 +6,23 @@ rm(list = objects())
 
 ####################################################################################################################################
 # ---------------------------------------------------------------------------------------------------------------------------------#
-#                                            title: "Transforming Lab Data from SI-IT"                                             #
+#                                          title: "Transforming Lab Data from SI-IT"                                               #
 # ---------------------------------------------------------------------------------------------------------------------------------#
 ####################################################################################################################################
 
+## -------------------------------------------------- ##
+##                  Import lab data                   ##
+## -------------------------------------------------- ##
 
-##  Import data
-lab_data <- read_csv("D:/# Projects/Si.Health/Data Si.Health/Data manament/MSih_0001-4000/3) IT folders/Data CSV/2019_IT SIH_9.csv")
+lab_data <- read_csv("D:/# Projects/Si.Health/Data Si.Health/Data manament/MSih_0001-4000/3) IT folders/Data af_CSV/2014_IT SIH_4.csv")
 attach(lab_data)
 
 
-help.search('data.table')
+## -------------------------------------------------- ##
+##        Loading Important packages/ libraries       ##
+## -------------------------------------------------- ##
+## install.packages("readr")
+## help.search('data.table')
 library(data.table)
 library(readr)
 library(readxl)
@@ -24,8 +30,6 @@ library(Hmisc)
 library(dplyr)
 library(tidyr)
 
-
-## Check available data
 
 describe(lab_data)
 
@@ -46,17 +50,38 @@ DT                  <- data.table(lab_data)
 Data_IT             <- DT[, visit_id2 := seq_len(.N), by=visit_id]
 view.data           <- View(Data_IT[c(7332,16592),])
 
-# ---------------------------------------------------------------------------------------------------------------------------------#
-#                                          data transformation >> long into wide format                                            #
-# ---------------------------------------------------------------------------------------------------------------------------------#
-# lab_data.wide <- lab_data_long %>% spread(TI_NAME, OD_TR_VAL, fill =NA, convert = FALSE)
+## --------------------------------------------------------------------------------------------------------------------------------##
+##                                           data transformation >> long into wide format                                          ##
+## --------------------------------------------------------------------------------------------------------------------------------##
 
+
+
+##-----------------------------------------------------------------##
+##   for data transformation               >>  visit_id == 1       ##
+##-----------------------------------------------------------------##
 
 lab_data_long       <- DT[,c("OH_PID","OH_TRX_DT","OH_BOD","OH_CLINIC_CODE","OD_TESTCODE","visit_id2","TI_NAME","OD_TR_VAL")]
-label_value_NA      <- lab_data_long$`OD_TR_VAL`[lab_data_long$`OD_TR_VAL` %in% c("","!","*","-")] <- NA
+label_value_NA      <- lab_data_long$`OD_TR_VAL`[lab_data_long$`OD_TR_VAL` %in% c("","!","*")] <- NA
 Re.data_it          <- reshape(lab_data_long, v.names = "OD_TR_VAL", direction = "wide",idvar = "OH_PID", timevar = "TI_NAME")
 names(Re.data_it)   <- gsub("OD_TR_VAL."," ", names(Re.data_it))
 lab_data_wide       <- Re.data_it
+
+
+
+
+##-----------------------------------------------------------------##
+##  for repeated data transformation   >>  visit_id == maximum     ##
+##-----------------------------------------------------------------##
+
+lab_data1                 <- as.data.table(lab_data)
+lab_data1$'visit_id'      <- paste(lab_data1$'OH_PID', lab_data1$'TI_NAME', sep = '||')
+lab_data2                 <- lab_data1[, visit_id2 := seq_len(.N), by=visit_id]
+lab_data3                 <- as.data.table(lab_data2)
+lab_data_long             <- lab_data3[, c("OH_PID", "OH_TRX_DT", "visit_id2","TI_NAME","OD_TR_VAL")]
+lab_data_long$OD_TR_VAL   <- na_if(lab_data_long$OD_TR_VAL, "!")
+LAB_data_wide             <- lab_data_long %>% spread(TI_NAME, OD_TR_VAL, fill = NA, convert = FALSE)
+LAB_data_wideUD           <- LAB_data_wide %>% group_by(OH_PID) %>% top_n(1, visit_id2)
+
 
 
 ####################################################################################################################################
