@@ -14,7 +14,7 @@ rm(list = objects())
 ##                  Import lab data                   ##
 ## -------------------------------------------------- ##
 
-lab_data <- read_csv("D:/# Projects/Si.Health/Data Si.Health/Data manament/MSih_0001-4000/3) IT folders/Data af_CSV/2014_IT SIH_4.csv")
+lab_data <- read_csv("D:/# Projects/Si.Health/Data Si.Health/Data manament/MSih_0001-4000/3) IT folders/Data af_CSV/2019_IT SIH_9.csv")
 attach(lab_data)
 
 
@@ -85,7 +85,7 @@ LAB_data_wideUD           <- LAB_data_wide %>% group_by(OH_PID) %>% top_n(1, vis
 #                                                       Export Data                                                                #
 ####################################################################################################################################
 
-write.csv(lab_data_wide,na =" ", "D:/# Projects/Si.Health/Data Si.Health/Data manament/MSih_0001-4000/3) IT folders/Reshape data/Re2017_IT.csv")
+write.csv(lab_data_wide,na =" ", "D:/# Projects/Si.Health/Data Si.Health/Data manament/MSih_0001-4000/3) IT folders/Reshape data/Re2019_IT9.csv")
 
 
 
