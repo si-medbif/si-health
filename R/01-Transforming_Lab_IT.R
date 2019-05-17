@@ -55,7 +55,6 @@ view.data           <- View(Data_IT[c(7332,16592),])
 ## --------------------------------------------------------------------------------------------------------------------------------##
 
 
-
 ##-----------------------------------------------------------------##
 ##   for data transformation               >>  visit_id == 1       ##
 ##-----------------------------------------------------------------##
@@ -65,8 +64,6 @@ label_value_NA      <- lab_data_long$`OD_TR_VAL`[lab_data_long$`OD_TR_VAL` %in% 
 Re.data_it          <- reshape(lab_data_long, v.names = "OD_TR_VAL", direction = "wide",idvar = "OH_PID", timevar = "TI_NAME")
 names(Re.data_it)   <- gsub("OD_TR_VAL."," ", names(Re.data_it))
 lab_data_wide       <- Re.data_it
-
-
 
 
 ##-----------------------------------------------------------------##
