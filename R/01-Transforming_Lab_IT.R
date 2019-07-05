@@ -49,6 +49,15 @@ describe(lab_data)
 ## --------------------------------------------------------------------------------------------------------------------------------##
 
 
+data.split[[1]]   ## Visit date
+
+
+
+
+
+
+
+
 ## Method 1
 ##-----------------------------------------------------------------##
 ##   for data transformation               >>  visit_id == 1       ##
@@ -84,6 +93,7 @@ lAB_wide                  <- lab_long %>% spread(TI_NAME, OD_TR_VAL, fill = NA, 
 lAB_wideUD                <- lAB_wide %>% group_by(OH_PID) %>% top_n(1, visit_id2)
 
 fre_ID                    <- table(lab_long$'OH_PID')   # check obs. of OH_PID
+
 ################                 END                        #########################################################################
 
 
@@ -116,5 +126,9 @@ for (i in 1:max.fre) {
   LAB_data_wide2[i,] <- c(data.split[[i]] %>% top_n(1, visit.no.times))
 
 }
+
+
+
+
 
 ################                 END                        #########################################################################
